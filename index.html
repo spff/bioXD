@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Catamaran:200,300,400">
 </head>
 
-<body style="margin=0; overflow-y: scroll; overflow-x: hidden">
+<body style="margin=0; overflow-y: hidden; overflow-x: hidden">
     <div id="container" style="position: absolute; z-index: 1; left:25%; right:25%; top:0%; width:50%; height:100%; font-family:Catamaran, sans-serif; font-size:24px; font-weight:200">
     </div>
     <div style="position: absolute; z-index: 3; left:25%; top:45%; width:50%; height:20%; text-align:center">
@@ -602,11 +602,12 @@
 
 
     function appearBio() {
+
         globalID4 = requestAnimationFrame(appearBio);
         document.getElementById("container").style.zIndex = "4";
         document.getElementById("canvas").style.backgroundColor = "white";
 
-
+    	document.body.style.overflowY = "auto";
     }
 
     var radius = 1;
@@ -638,6 +639,7 @@
 
 
     function anotherCircle() {
+
         globalID3 = requestAnimationFrame(theAnother);
 
         console.log("hi");
@@ -649,6 +651,7 @@
 
 
     function disappearSpan() {
+
         if (spanOp >0.05) {
             requestAnimationFrame(disappearSpan);
         } else {
