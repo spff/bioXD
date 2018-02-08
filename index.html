@@ -383,7 +383,7 @@
                     } else {
                         this.arr[bi] = [(i % Alphabet.width) * Alphabet.scale * scale + xoffset, (Math.floor(i / Alphabet.width)) * Alphabet.scale * scale + yoffset];
                         bi++;
-                        downscale = 4;
+                        downscale = 6;
                     }
                 }
             }
@@ -548,7 +548,7 @@
         circles[i] = new Circle(i, testTransbit[i % testTransbit.length][0], testTransbit[i % testTransbit.length][1] * 5 / 4, d, b, s, c);
     }
     function makeCircles() {
-        var maxCircles = 750;
+        var maxCircles = 520;
         for (var i = 0; i < maxCircles; i++) {
             createCircle(i);
         }
