@@ -31,12 +31,16 @@
         return decodeURIComponent(escape(window.atob(str)));
     }
 
-
+    
 
     if (url.param('for') == null) {
         alert("wrong key");
     }
 
+    if (url.param('for') == "a2luZ3dheXRlaw==") {
+        url.param('for') = "MTA0IFVTRVJT";
+    }
+        
     document.getElementById("Statut").textContent = b64_to_utf8(url.param('for'));
 
 
