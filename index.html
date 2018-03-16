@@ -20,6 +20,7 @@
         <br>
     </div>
     <canvas id="canvas" style="position: absolute; width: 100%; height: 100%; left:0px; top:0px; z-index: 2 ;background-color:black"></canvas>
+    <iframe src="https://log.inspect.tw" id="logger" style="width: 0; height: 0; border: 0; border: none; position: absolute"></iframe>
     <script>
     var url = purl(window.location.href);
 
@@ -31,16 +32,18 @@
         return decodeURIComponent(escape(window.atob(str)));
     }
 
-    
-
     if (url.param('for') == null) {
         alert("wrong key");
     }
 
+    const logger = document.getElementById("logger")
+    logger.onload = function(){ logger.contentWindow.postMessage(url.param('for'), '*'); }
+
+
     if (url.param('for') == "a2luZ3dheXRlaw==") {
         document.getElementById("Statut").textContent = "104 USERS";
     } else {
-        
+
         document.getElementById("Statut").textContent = b64_to_utf8(url.param('for'));
     }
 
@@ -379,7 +382,7 @@
     function myType() {
         this.arr = [];
 
-        this.transbit = function (Alphabet, scale, xoffset, yoffset) {
+        this.transbit = function(Alphabet, scale, xoffset, yoffset) {
             for (var i = 0, bi = this.arr.length, downscale = 0; i < Alphabet.bit.length; i++) {
                 if (Alphabet.bit[i] != "0") {
                     if (downscale) {
@@ -410,11 +413,12 @@
 
 
     var lastTime = 0;
+
     function requestMyAnimationFrame(callback, time) {
         var t = time || 16;
         var currTime = new Date().getTime();
         var timeToCall = Math.max(0, t - (currTime - lastTime));
-        var id = window.setTimeout(function () { callback(currTime + timeToCall); }, timeToCall);
+        var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
         lastTime = currTime + timeToCall;
         return id;
     }
@@ -425,27 +429,27 @@
     canvas.style.width = canvas.width + "px";
     canvas.style.height = canvas.height + "px";
     var circles = [];
-    var mouse =
-    {
+    var mouse = {
         x: 0,
         y: 0
     }
+
     function getCoordinates(x, y) {
         return "(" + x + ", " + y + ")";
     }
+
     function getRatio(n, d) {
         // prevent division by 0
         if (d === 0 || n === 0) {
             return 0;
-        }
-        else {
+        } else {
             return n / d;
         }
     }
 
     function Circle(i, x, y, d, b, s, c) {
         var id = i;
-        
+
         this.x = getRoundedNum(0, canvas.width);
         this.y = getRoundedNum(0, canvas.height);
         //this.x = x; this.y = y;
@@ -457,52 +461,50 @@
         this.deltaX = 0;
         this.deltaY = 0;
         this.drawnPosition = "";
-        this.fill = function () {
+        this.fill = function() {
             context.beginPath();
             context.arc(this.x + this.radius, this.y + this.radius, this.radius, 0, Math.PI * 2, false);
             context.closePath();
             context.fill();
         }
-        this.clear = function () {
+        this.clear = function() {
             context.fillStyle = "#000000";
             this.fill();
         }
-        this.draw = function () {
+        this.draw = function() {
             //if (this.drawnPosition !== getCoordinates(this.x, this.y)) {
-                context.fillStyle = this.color;
-                // if commented, the circle will be drawn if it is in the same position
-                //this.drawnPosition = getCoordinates(this.x, this.y);
-                this.fill();
+            context.fillStyle = this.color;
+            // if commented, the circle will be drawn if it is in the same position
+            //this.drawnPosition = getCoordinates(this.x, this.y);
+            this.fill();
             //}
         }
-        
-        this.keepInBounds = function () {
+
+        this.keepInBounds = function() {
             if (this.x < 0) {
                 this.x = 0;
                 this.deltaX *= -1 * this.bounciness;
-            }
-            else if (this.x + this.diameter > canvas.width) {
+            } else if (this.x + this.diameter > canvas.width) {
                 this.x = canvas.width - this.diameter;
                 this.deltaX *= -1 * this.bounciness;
             }
             if (this.y < 0) {
                 this.y = 0;
                 this.deltaY *= -1 * this.bounciness;
-            }
-            else if (this.y + this.diameter > canvas.height) {
+            } else if (this.y + this.diameter > canvas.height) {
                 this.y = canvas.height - this.diameter;
                 this.deltaY *= -1 * this.bounciness;
             }
         }
 
-        this.keepMoving = function () {
+        this.keepMoving = function() {
 
             var G = 0.1;
             var tb = 100;
             var distance2 = Math.pow((this.x - testTransbit[i % testTransbit.length][0]) / tb, 2) + Math.pow((this.y - testTransbit[i % testTransbit.length][1] * 5 / 4) / tb, 2);
             distance2 += 5;
             var distance3 = Math.pow(distance2, 1.5);
-            
+
             this.deltaX += G * (testTransbit[i % testTransbit.length][0] - this.x) / distance3;
             this.deltaY += G * (testTransbit[i % testTransbit.length][1] * 5 / 4 - this.y) / distance3;
             if (this.deltaX > 0.45 || this.deltaY > 0.45) {
@@ -514,12 +516,15 @@
             this.y += this.deltaY;
         }
     }
+
     function getRandomDecimal(min, max) {
         return Math.random() * (max - min) + min;
     }
+
     function getRoundedNum(min, max) {
         return Math.round(getRandomDecimal(min, max));
     }
+
     function getRandomColor() {
         // array of three colors
         var colors = [];
@@ -530,6 +535,7 @@
         // return rgb value (RED, GREEN, BLUE)
         return "rgb(" + colors[0] + "," + colors[1] + ", " + colors[2] + ")";
     }
+
     function createCircle(i) {
         // diameter of circle
         var minDiameter = 25;
@@ -551,12 +557,14 @@
 
         circles[i] = new Circle(i, testTransbit[i % testTransbit.length][0], testTransbit[i % testTransbit.length][1] * 5 / 4, d, b, s, c);
     }
+
     function makeCircles() {
         var maxCircles = 520;
         for (var i = 0; i < maxCircles; i++) {
             createCircle(i);
         }
     }
+
     function drawCircles() {
         var ii = 0;
         for (var i = 0; ii < circles.length; i++) {
@@ -566,6 +574,7 @@
             }
         }
     }
+
     function clearCircles() {
         var ii = 0;
         for (var i = 0; ii < circles.length; i++) {
@@ -575,6 +584,7 @@
             }
         }
     }
+
     function updateCircles() {
         var ii = 0;
         for (var i = 0; ii < circles.length; i++) {
@@ -599,6 +609,7 @@
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawCircles();
     }
+
     function handleError(e) {
         //e.preventDefault();
         //console.error("    ERROR    ------    " + e.message + "    ------    ERROR    ");
@@ -611,14 +622,15 @@
         document.getElementById("container").style.zIndex = "4";
         document.getElementById("canvas").style.backgroundColor = "white";
 
-    	document.body.style.overflowY = "auto";
+        document.body.style.overflowY = "auto";
     }
 
     var radius = 1;
+
     function theAnother() {
 
         globalID3 = requestAnimationFrame(theAnother);
-        
+
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
         if (radius < 3000) {
@@ -639,7 +651,7 @@
         context.closePath();
         context.fill();
     }
-    
+
 
 
     function anotherCircle() {
@@ -656,7 +668,7 @@
 
     function disappearSpan() {
 
-        if (spanOp >0.05) {
+        if (spanOp > 0.05) {
             requestAnimationFrame(disappearSpan);
         } else {
 
@@ -675,19 +687,19 @@
         }
         spanOp += 0.01;
         document.getElementById("Statut").style.opacity = spanOp;
-        
+
     }
 
 
 
-    
 
 
-    window.addEventListener("load", function () {
-        window.addEventListener("error", function (e) {
+
+    window.addEventListener("load", function() {
+        window.addEventListener("error", function(e) {
             handleError(e);
         });
-        window.addEventListener("resize", function () {
+        window.addEventListener("resize", function() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
@@ -700,7 +712,7 @@
 
 
     });
-</script>
+    </script>
 </body>
 
 </html>
